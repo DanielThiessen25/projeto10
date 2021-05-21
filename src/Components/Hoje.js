@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import UserContext from '../contexts/UserContext';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Link, Redirect } from "react-router-dom";
 
 export default function Hoje() {
     const { user, setUser } = useContext(UserContext);
@@ -63,7 +64,7 @@ export default function Hoje() {
             </Content>
 
             <Rodape>
-                <p>Hábitos</p>
+                <Link to={"/habitos"}><p>Hábitos</p></Link>
                 <p>Histórico</p>
             </Rodape>
             <Circulo>Hoje</Circulo>
