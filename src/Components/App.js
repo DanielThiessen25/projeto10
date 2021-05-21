@@ -1,64 +1,25 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import { BrowserRouter, Switch, Route } from "react-router-dom";
 import UserContext from '../contexts/UserContext';
+import Home from "./Home";
+import Cadastro from "./Cadastro";
+import Hoje from "./Hoje";
 
 
 export default function App() {
-
+    const [user, setUser] = useState();
 
     return (
-        <screen>
-            <logo></logo>
-            <content>
-                <input type="email" placeholder="e-mail"></input>
-                <input type="password" placeholder="senha"></input>
-                <button type="submit">Entrar</button>
-            </content>
-        </screen>
+        <BrowserRouter>
+            <Switch>
+                <UserContext.Provider value={{ user, setUser }}>
+                    <Route path="/" exact={true} component={Home} />
+                    <Route path="/cadastro" exact={true} component={Cadastro} />
+                    <Route path="/hoje" exact={true} component={Hoje} />
+                </UserContext.Provider>
+            </Switch>
+        </BrowserRouter>
     );
 }
 
 
-const screen = styled.div`
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    background: white;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    font-family: 'Lexend Deca', sans-serif;
-`;
-
-const logo = styled.div`
-    width: 180px;
-    height: 180px;
-    background: blueviolet;
-    margin-top: 68px;
-`;
-
-const content = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 60px;
-
-    input{
-    width: 300px;
-    height: 45px;
-    margin-bottom: 6px;
-    background: #FFFFFF;
-    border: 1px solid #D5D5D5;
-    box-sizing: border-box;
-    border-radius: 5px;
-    }
-
-    button{
-    width: 303px;
-    height: 45px;
-    background: #52B6FF;
-    border-radius: 4.63636px;
-    }
-
-`;
