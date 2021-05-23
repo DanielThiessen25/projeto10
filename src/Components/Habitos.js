@@ -4,8 +4,121 @@ import UserContext from '../contexts/UserContext';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, Redirect } from "react-router-dom";
+import Dia from "./Dia";
+import Item from "./Item";
 
 export default function Habitos() {
+    const { user, setUser } = useContext(UserContext);
+    const [nome, setNome] = useState("");
+    const [verificador, setVerificador] = useState(false);
+    const [dias, setDias] = useState([]);
+    const [lista, setLista] = useState();
+   const [recarregar, setRecarregar] = useState(0);
+
+    function adicionarHabito(event) {
+        event.preventDefault();
+        const body = {
+            name: nome,
+            days: dias
+        }
+
+        const config = {
+            headers: {
+                Authorization: "Bearer " + user.token
+            }
+        }
+
+        const requisicao = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", body, config);
+        requisicao.then(resposta => console.log(resposta.data));
+
+        setDias([]);
+        setVerificador(false);
+        setNome("");
+        setRecarregar(recarregar + 1);
+    }
+
+
+    useEffect(() => {
+        const config = {
+            headers: {
+                Authorization: "Bearer " + user.token
+            }
+        }
+        const requisicao = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config);
+        requisicao.then(resposta => setLista(resposta.data));
+    }, [recarregar]);
+
+    function listarHabitos() {
+        if (lista == null) {
+            return ("Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!");
+        }
+        else {
+            return (
+                lista.map(item =>
+                        <Item item={item} deletar={deletarHabito} />
+                    )
+            );
+        }
+    }
+
+    function deletarHabito(id){
+        alert("DELETAR?");
+        const config = {
+            headers: {
+                Authorization: "Bearer " + user.token
+            }
+        }
+
+        const requisicao = axios.delete("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/"+id, config);
+        requisicao.then(resposta => console.log(resposta.data));
+        setRecarregar(recarregar + 1);
+    }
+
+    function adicionar() {
+        if (verificador == true) {
+            return (
+                <Inserir>
+                    <form onSubmit={adicionarHabito}>
+                        <input type="text" placeholder="Nome do hábito" value={nome} required onChange={e => setNome(e.target.value)}></input>
+                        <FaixaButton>
+                            <Dia numero={0} funcaoRemover={removerDia} funcaoAdd={addDia} />
+                            <Dia numero={1} funcaoRemover={removerDia} funcaoAdd={addDia} />
+                            <Dia numero={2} funcaoRemover={removerDia} funcaoAdd={addDia} />
+                            <Dia numero={3} funcaoRemover={removerDia} funcaoAdd={addDia} />
+                            <Dia numero={4} funcaoRemover={removerDia} funcaoAdd={addDia} />
+                            <Dia numero={5} funcaoRemover={removerDia} funcaoAdd={addDia} />
+                            <Dia numero={6} funcaoRemover={removerDia} funcaoAdd={addDia} />
+                        </FaixaButton>
+                        <FaixaOpcoes>
+                            <button type="submit">Salvar</button>
+                            <div onClick={() => setVerificador(false)}><p>Cancelar</p></div>
+                        </FaixaOpcoes>
+                    </form>
+                </Inserir>
+            );
+        }
+        else { }
+    }
+
+    function removerDia(indice) {
+        let retirar = 0;
+        let atualizador = [...dias];
+        for (let i = 0; i < atualizador.length; i++) {
+            if (atualizador[i] === indice) {
+                retirar = i;
+            }
+        }
+        atualizador.splice(retirar, 1);
+        setDias(atualizador);
+        
+    }
+
+    function addDia(indice) {
+        setDias([...dias, indice]);
+    }
+
+
+
     return (
         <Screen>
             <Topo>
@@ -15,21 +128,22 @@ export default function Habitos() {
 
             <Content>
                 <Faixa>
-                <Titulo>Meus hábitos</Titulo>
-                <Add><ion-icon name="add-outline"></ion-icon></Add>
+                    <Titulo>Meus hábitos</Titulo>
+                    <Add onClick={() => setVerificador(true)}><ion-icon name="add-outline"></ion-icon></Add>
                 </Faixa>
+                {adicionar()}
+                <Texto >
+                    {listarHabitos()}
 
-                <Texto>
-                Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!
                 </Texto>
-                
+
             </Content>
 
             <Rodape>
                 <Link to={"/habitos"}><p>Hábitos</p></Link>
                 <p>Histórico</p>
             </Rodape>
-            <Circulo>Hoje</Circulo>
+            <Link to={"/hoje"}><Circulo>Hoje</Circulo></Link>
         </Screen>
 
 
@@ -172,7 +286,76 @@ const Texto = styled.div`
 font-weight: normal;
 font-size: 17.976px;
 line-height: 22px;
-
 color: #666666;
 
 `;
+
+const Inserir = styled.div`
+width:90%;
+height: 180px;
+margin-bottom: 30px;
+background: #FFFFFF;
+border-radius: 5px;
+display: flex;
+flex-direction: column;
+align-items: center;
+
+form{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+input{
+    padding: 10px;
+    width: 300px;
+    height: 45px;
+    margin-top: 18px ;
+    margin-bottom: 10px;
+    background: #FFFFFF;
+    border: 1px solid #D5D5D5;
+    box-sizing: border-box;
+    border-radius: 5px;
+    font-style: normal;
+    font-weight: normal;
+    font-size: 19.976px;
+    line-height: 25px;
+    }
+`;
+
+const FaixaButton = styled.div`
+width: 100%;
+margin-bottom: 30px;
+display: flex;
+flex-direction: row;
+
+`;
+
+const FaixaOpcoes = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+
+    p{
+        font-style: normal;
+        font-weight: normal;
+        font-size: 15.976px;
+        line-height: 20px;
+        color: #52B6FF;
+        margin-right: 23px;
+    }
+
+    button{
+width: 84px;
+height: 35px;
+background: #52B6FF;
+border-radius: 4.6px;
+font-size: 15.976px;
+line-height: 20px;
+color: #FFFFFF;
+    }
+`;
+
+
+ 

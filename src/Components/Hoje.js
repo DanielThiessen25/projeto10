@@ -7,7 +7,7 @@ import { Link, Redirect } from "react-router-dom";
 
 export default function Hoje() {
     const { user, setUser } = useContext(UserContext);
-
+    const [listaDia, setListaDia] = useContext([]);
 
     useEffect(() => {
         const config = {
@@ -18,9 +18,13 @@ export default function Hoje() {
         const requisicao = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config);
 
         requisicao.then(resposta => {
-            console.log(resposta.data);
+            setListaDia(resposta.data);
         });
     }, []);
+
+    function habitosDia (){
+
+    }
 
     return (
         <Screen>
@@ -34,6 +38,20 @@ export default function Hoje() {
                     <Concluido>Nenhum hábito concluído ainda</Concluido>
                 </Textos>
 
+
+                
+
+                {listaDia.map(item => 
+                    <Habito>
+                    <Container>
+                        <Nome>{item.name}</Nome>
+                        <Info>Sequência atual: <p>{item.currentSequence}</p></Info>
+                        <Info>Seu recorde: <p>{item.highestSequence}</p></Info>
+                    </Container>
+                    <Icone><ion-icon name="checkmark-sharp"></ion-icon></Icone>
+                    </Habito>
+                    
+                    )}
 
                 <Habito>
                     <Container>
