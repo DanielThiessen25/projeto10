@@ -204,8 +204,11 @@ const Content = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 100px;
-
+    position: fixed;
+    top:100px;
+    bottom:80px;
+    overflow: hidden;
+    overflow-y: scroll;
 `;
 
 const Faixa = styled.div`

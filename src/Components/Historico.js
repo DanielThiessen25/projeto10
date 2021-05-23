@@ -18,7 +18,7 @@ export default function Historico(){
                 <Titulo>Histórico</Titulo>
             </Faixa>
             <Texto >
-                Em breve você poderá ver o histórico dos seus hábitos aqui!s
+                Em breve você poderá ver o histórico dos seus hábitos aqui! 
            </Texto>
         </Content>
         <Rodape>
@@ -86,7 +86,11 @@ const Content = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 100px;
+    position: fixed;
+    top:100px;
+    bottom:80px;
+    overflow: hidden;
+    overflow-y: scroll;
 
 `;
 

@@ -110,7 +110,12 @@ const Content = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 100px;
+    position: fixed;
+    bottom:80px;
+    top: 100px;
+    overflow: hidden;
+    overflow-y: scroll;
+
 
 `;
 
