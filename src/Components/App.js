@@ -5,6 +5,7 @@ import Home from "./Home";
 import Cadastro from "./Cadastro";
 import Hoje from "./Hoje";
 import Habitos from "./Habitos";
+import Historico from "./Historico";
 
 
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
                     <Route path="/cadastro" exact={true} component={Cadastro} />
                     <Route path="/hoje" exact={true} component={Hoje} />
                     <Route path="/habitos" exact={true} component={Habitos} />
+                    <Route path="/historico" exact={true} component={Historico} />
                 </UserContext.Provider>
             </Switch>
         </BrowserRouter>

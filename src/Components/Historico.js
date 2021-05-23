@@ -1,57 +1,35 @@
-import styled from 'styled-components';
-import React, { useContext } from 'react';
-import UserContext from '../contexts/UserContext';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Link, Redirect } from "react-router-dom";
-import AtividadeDia from "./AtividadeDia";
+import styled from 'styled-components';
+import UserContext from '../contexts/UserContext';
+import React, { useContext } from 'react';
 
-export default function Hoje() {
+export default function Historico(){
     const { user, setUser } = useContext(UserContext);
-    const [listaDia, setListaDia] = useState([]);
-    const [done, setDone] = useState(false);
+    return(
 
-    useEffect(() => {
-        const config = {
-            headers: {
-                Authorization: "Bearer " + user.token
-            }
-        }
-        const requisicao = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today", config);
-
-        requisicao.then(resposta => {
-            setListaDia(resposta.data);
-        });
-    }, []);
-
-
- 
-
-    return (
         <Screen>
-            <Topo>
-                <Logo>TrackIt</Logo>
-                <Foto><img src={user.image} /></Foto>
-            </Topo>
-            <Content>
-                <Textos>
-                    <Titulo>Segunda, 17/05</Titulo>
-                    <Concluido>Nenhum hábito concluído ainda</Concluido>
-                </Textos>
+        <Topo>
+            <Logo>TrackIt</Logo>
+            <Foto><img src={user.image} /></Foto>
+        </Topo>
 
-                {listaDia.map(item => 
-                    <AtividadeDia item={item}></AtividadeDia>      
-                    )}
-
-            </Content>
-
-            <Rodape>
+        <Content>
+            <Faixa>
+                <Titulo>Histórico</Titulo>
+            </Faixa>
+            <Texto >
+                Em breve você poderá ver o histórico dos seus hábitos aqui!s
+           </Texto>
+        </Content>
+        <Rodape>
             <Link to={"/habitos"} className="link"><p>Hábitos</p></Link>
             <Link to={"/hoje"} className="link"><Circulo>Hoje</Circulo></Link>
             <Link to={"/historico"} className="link"><p>Histórico</p></Link>
         </Rodape>
-            
-        </Screen>
+        
+        
+    </Screen>
+
     );
 }
 
@@ -101,8 +79,6 @@ img{
     height: 100%;
     border-radius: 25px;
 }
-
-
 `;
 
 const Content = styled.div`
@@ -114,8 +90,13 @@ const Content = styled.div`
 
 `;
 
-const Textos = styled.div`
+const Faixa = styled.div`
 width: 90%;
+margin-bottom: 28px;
+display: flex;
+flex-direction: row;
+align-items: center;
+justify-content: space-between;
 `;
 
 const Titulo = styled.div`
@@ -125,17 +106,6 @@ font-size: 22.976px;
 line-height: 29px;
 color: #126BA5;
 `;
-
-const Concluido = styled.div`
-margin-bottom: 28px;
-font-style: normal;
-font-weight: normal;
-font-size: 17.976px;
-line-height: 22px;
-color: #BABABA
-`;
-
-
 
 
 const Rodape = styled.div`
@@ -167,7 +137,6 @@ const Circulo = styled.div`
 width: 91px;
 height: 91px;
 margin-bottom: 40px;
-left: auto;
 background: #52B6FF;
 border-radius: 45px;
 z-index: 10;
@@ -182,6 +151,15 @@ text-align: center;
 color: #FFFFFF;  
 `;
 
-const Feito = styled.div`
-background: #8FC549;
+const Texto = styled.div`
+    width: 90%;
+    font-style: normal;
+font-weight: normal;
+font-size: 17.976px;
+line-height: 22px;
+color: #666666;
+
 `;
+
+
+ 

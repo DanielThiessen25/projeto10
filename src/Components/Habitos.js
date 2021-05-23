@@ -123,7 +123,7 @@ export default function Habitos() {
         <Screen>
             <Topo>
                 <Logo>TrackIt</Logo>
-                <Foto></Foto>
+                <Foto><img src={user.image} /></Foto>
             </Topo>
 
             <Content>
@@ -140,10 +140,11 @@ export default function Habitos() {
             </Content>
 
             <Rodape>
-                <Link to={"/habitos"}><p>Hábitos</p></Link>
-                <p>Histórico</p>
-            </Rodape>
-            <Link to={"/hoje"}><Circulo>Hoje</Circulo></Link>
+            <Link to={"/habitos"} className="link"><p>Hábitos</p></Link>
+            <Link to={"/hoje"} className="link"><Circulo>Hoje</Circulo></Link>
+            <Link to={"/historico"} className="link"><p>Histórico</p></Link>
+        </Rodape>
+            
         </Screen>
 
 
@@ -190,7 +191,12 @@ const Foto = styled.div`
 width: 51px;
 height: 51px;
 margin-right: 18px;
-background: cornflowerblue;
+
+img{
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+}
 `;
 
 const Content = styled.div`
@@ -264,8 +270,7 @@ box-sizing: border-box;
 const Circulo = styled.div`
 width: 91px;
 height: 91px;
-position: fixed;
-bottom: 10px;
+margin-bottom: 40px;
 background: #52B6FF;
 border-radius: 45px;
 z-index: 10;
