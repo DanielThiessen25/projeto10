@@ -17,13 +17,13 @@ export default function App() {
         <BrowserRouter>
             <Switch>
                 <UserContext.Provider value={{ user, setUser }}>
-                <UserContext.Provider value={{ atividades, setAtividades}}>
+                <AtividadeContext.Provider value={{ atividades, setAtividades }}>
                     <Route path="/" exact={true} component={Home} />
                     <Route path="/cadastro" exact={true} component={Cadastro} />
                     <Route path="/hoje" exact={true} component={Hoje} />
                     <Route path="/habitos" exact={true} component={Habitos} />
                     <Route path="/historico" exact={true} component={Historico} />
-                    </UserContext.Provider>
+                    </AtividadeContext.Provider>
                 </UserContext.Provider>
             </Switch>
         </BrowserRouter>

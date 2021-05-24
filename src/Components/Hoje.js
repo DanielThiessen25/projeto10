@@ -7,11 +7,13 @@ import { Link, Redirect } from "react-router-dom";
 import AtividadeDia from "./AtividadeDia";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
+import AtividadeContext from '../contexts/AtividadeContext';
 
 export default function Hoje() {
+    const {atividades, setAtividades} = useContext(AtividadeContext);
     const { user, setUser } = useContext(UserContext);
     const [listaDia, setListaDia] = useState([]);
-    const [done, setDone] = useState(false);
+    const [done, setDone] = useState(0);
     const dayjs = require('dayjs');
     let now = dayjs();
 
@@ -44,7 +46,8 @@ export default function Hoje() {
     }
 
     useEffect(() => {
-        console.log(now.format('dddd DD'));
+        razao();
+
         const config = {
             headers: {
                 Authorization: "Bearer " + user.token
@@ -54,10 +57,29 @@ export default function Hoje() {
 
         requisicao.then(resposta => {
             setListaDia(resposta.data);
+            setAtividades(resposta.data);
         });
     }, []);
 
+    function razao(){
+        let atividadesFeitas = 0;
+        for(let i=0; i<atividades.length; i++){
+            if(atividades[i].done == true){
+                atividadesFeitas ++;
+            }
+        }
+        setDone(atividadesFeitas/atividades.length);
+        console.log(atividadesFeitas/atividades.length);
+    }
 
+function subtitulo(){
+    if(done == 0){
+        return("Nenhum hábito concluído ainda");
+    }
+    else{
+        return(<h2>{done*100 +"% dos hábitos concluídos"}</h2>);
+    }
+}
  
 
     return (
@@ -69,7 +91,7 @@ export default function Hoje() {
             <Content>
                 <Textos>
                     <Titulo>{diaHoje()}</Titulo>
-                    <Concluido>Nenhum hábito concluído ainda</Concluido>
+                    <Concluido>{subtitulo()}</Concluido>
                 </Textos>
 
                 {listaDia.map(item => 
@@ -171,6 +193,10 @@ font-weight: normal;
 font-size: 17.976px;
 line-height: 22px;
 color: #BABABA
+
+h2{
+    color:#8FC549;
+}
 `;
 
 
