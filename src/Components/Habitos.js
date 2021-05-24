@@ -6,6 +6,7 @@ import axios from 'axios';
 import { Link, Redirect } from "react-router-dom";
 import Dia from "./Dia";
 import Item from "./Item";
+import Loader from "react-loader-spinner";
 
 export default function Habitos() {
     const { user, setUser } = useContext(UserContext);
@@ -14,9 +15,12 @@ export default function Habitos() {
     const [dias, setDias] = useState([]);
     const [lista, setLista] = useState();
    const [recarregar, setRecarregar] = useState(0);
+   const [disable, setDisable] = useState(false);
 
     function adicionarHabito(event) {
         event.preventDefault();
+        setDisable(true);
+
         const body = {
             name: nome,
             days: dias
@@ -29,12 +33,15 @@ export default function Habitos() {
         }
 
         const requisicao = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", body, config);
-        requisicao.then(resposta => console.log(resposta.data));
-
+        requisicao.then(atualizar);
         setDias([]);
         setVerificador(false);
         setNome("");
         setRecarregar(recarregar + 1);
+    }
+
+    function atualizar(resposta){
+        setDisable(false);
     }
 
 
@@ -74,6 +81,27 @@ export default function Habitos() {
         setRecarregar(recarregar + 1);
     }
 
+    function carregar (){
+        if (disable === false) {
+            return (
+                "Salvar"
+            );
+        }
+        else {
+            return (
+                <Loader
+                    type="ThreeDots"
+                    color="#FFFFFF"
+                    height={100}
+                    width={45}
+                    timeout={3000}
+                />
+
+            );
+
+        }
+    }
+
     function adicionar() {
         if (verificador == true) {
             return (
@@ -90,7 +118,7 @@ export default function Habitos() {
                             <Dia numero={6} funcaoRemover={removerDia} funcaoAdd={addDia} />
                         </FaixaButton>
                         <FaixaOpcoes>
-                            <button type="submit">Salvar</button>
+                            <button type="submit">{carregar()}</button>
                             <div onClick={() => setVerificador(false)}><p>Cancelar</p></div>
                         </FaixaOpcoes>
                     </form>
@@ -344,6 +372,7 @@ const FaixaOpcoes = styled.div`
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
+    margin-bottom:10px;
 
     p{
         font-style: normal;
@@ -358,6 +387,7 @@ const FaixaOpcoes = styled.div`
 width: 84px;
 height: 35px;
 background: #52B6FF;
+border: none;
 border-radius: 4.6px;
 font-size: 15.976px;
 line-height: 20px;

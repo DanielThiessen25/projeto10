@@ -5,13 +5,46 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, Redirect } from "react-router-dom";
 import AtividadeDia from "./AtividadeDia";
+import { CircularProgressbar } from 'react-circular-progressbar';
+import 'react-circular-progressbar/dist/styles.css';
 
 export default function Hoje() {
     const { user, setUser } = useContext(UserContext);
     const [listaDia, setListaDia] = useState([]);
     const [done, setDone] = useState(false);
+    const dayjs = require('dayjs');
+    let now = dayjs();
+
+    function diaHoje(){
+        let dia = now.format('dddd');
+        if(dia == "Sunday"){
+            dia = "Domingo";
+        }
+        else if(dia == "Monday"){
+            dia = "Segunda";
+        }
+        else if(dia == "Tuesday"){
+            dia = "Terça";
+        }
+        else if(dia == "Wednesday"){
+            dia = "Quarta";
+        }
+        else if(dia == "Thursday"){
+            dia = "Quinta";
+        }
+        else if(dia == "Friday"){
+            dia = "Sexta";
+        }
+        else if(dia == "Saturday"){
+            dia = "Sábado";
+        }
+        let diaMes = now.format('DD');
+        let Mes = now.format('MM');
+        return(dia + ", " + diaMes+"/"+Mes);
+    }
 
     useEffect(() => {
+        console.log(now.format('dddd DD'));
         const config = {
             headers: {
                 Authorization: "Bearer " + user.token
@@ -35,7 +68,7 @@ export default function Hoje() {
             </Topo>
             <Content>
                 <Textos>
-                    <Titulo>Segunda, 17/05</Titulo>
+                    <Titulo>{diaHoje()}</Titulo>
                     <Concluido>Nenhum hábito concluído ainda</Concluido>
                 </Textos>
 
