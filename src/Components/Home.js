@@ -4,17 +4,19 @@ import UserContext from '../contexts/UserContext';
 import { Link, Redirect } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Loader from "react-loader-spinner";
 
 export default function Home() {
     const { user, setUser } = useContext(UserContext);
     const [password, setPassword] = useState("");
     const [email, setEmail] = useState("");
-    const [token, setToken] = useState("");
     const [test, setTest] = useState(false);
+    const [disable, setDisable] = useState(false);
 
 
     function doLogin(event) {
         event.preventDefault();
+        setDisable(true);
 
         const body = {
             email: email,
@@ -22,8 +24,15 @@ export default function Home() {
         }
 
         const requisicao = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/auth/login", body);
-
         requisicao.then(loadUser);
+        requisicao.catch(tratarErro);
+    }
+    function tratarErro(erro) {
+        alert("Dados Incorretos!");
+        setDisable(false);
+        setTest(false);
+        setEmail("");
+        setPassword("");
     }
 
     function loadUser(object) {
@@ -38,15 +47,40 @@ export default function Home() {
         }
     }
 
+    function carregar() {
+        if (disable === false) {
+            return (
+                "Entrar"
+            );
+        }
+        else {
+            return (
+                <Loader
+                    type="ThreeDots"
+                    color="#FFFFFF"
+                    height={100}
+                    width={45}
+                    timeout={3000}
+                />
+
+            );
+
+        }
+    }
+
 
     return (
         <Screen>
-            <Logo></Logo>
+            <Logo>
+                <img src={"logo.PNG"} />
+            TrackIt
+            </Logo>
             <Content>
                 <form onSubmit={doLogin}>
-                    <input type="email" placeholder="e-mail" value={email} required onChange={e => setEmail(e.target.value)}></input>
-                    <input type="password" placeholder="senha" value={password} required onChange={e => setPassword(e.target.value)}></input>
-                    <button type="submit">Entrar</button>
+                    <input type="email" placeholder="e-mail" disabled={disable} value={email} required onChange={e => setEmail(e.target.value)}></input>
+                    <input type="password" placeholder="senha" disabled={disable} value={password} required onChange={e => setPassword(e.target.value)}></input>
+                    <button type="submit">{carregar()}</button>
+
                 </form>
                 <Link to={"/cadastro"}><Cadastro>Não tem uma conta? Cadastre-se!</Cadastro></Link>
                 {render()}
@@ -72,8 +106,18 @@ const Screen = styled.div`
 const Logo = styled.div`
     width: 180px;
     height: 180px;
-    background: blueviolet;
     margin-top: 68px;
+    font-family: 'Playball', cursive;
+font-style: normal;
+font-weight: normal;
+font-size: 68.982px;
+line-height: 86px;
+color: #126BA5;
+
+    img{
+        width: 100%;
+        height: auto;
+    }
 `;
 
 const Content = styled.div`
@@ -82,6 +126,7 @@ const Content = styled.div`
     flex-direction: column;
     align-items: center;
     margin-top: 60px;
+
 
     form{
         display: flex;
@@ -116,6 +161,10 @@ const Content = styled.div`
     text-align: center;
     color: #FFFFFF; 
     border:none;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
     }
 
 `;
