@@ -7,10 +7,8 @@ import { Link, Redirect } from "react-router-dom";
 import AtividadeDia from "./AtividadeDia";
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-import AtividadeContext from '../contexts/AtividadeContext';
 
 export default function Hoje() {
-    const {atividades, setAtividades} = useContext(AtividadeContext);
     const { user, setUser } = useContext(UserContext);
     const [listaDia, setListaDia] = useState([]);
     const [done, setDone] = useState(0);
@@ -46,8 +44,8 @@ export default function Hoje() {
     }
 
     useEffect(() => {
-        razao();
-
+        console.log(now.format('dddd DD'));
+        
         const config = {
             headers: {
                 Authorization: "Bearer " + user.token
@@ -57,21 +55,10 @@ export default function Hoje() {
 
         requisicao.then(resposta => {
             setListaDia(resposta.data);
-            setAtividades(resposta.data);
         });
     }, []);
 
-    function razao(){
-        let atividadesFeitas = 0;
-        for(let i=0; i<atividades.length; i++){
-            if(atividades[i].done == true){
-                atividadesFeitas ++;
-            }
-        }
-        setDone(atividadesFeitas/atividades.length);
-        console.log(atividadesFeitas/atividades.length);
-    }
-
+    
 function subtitulo(){
     if(done == 0){
         return("Nenhum hábito concluído ainda");
